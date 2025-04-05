@@ -45,7 +45,7 @@ pipeline {
 
         stage('Publish .NET 8 Web API') {
             steps {
-                dir('Webapi') {
+                dir('dotnet_with_terraform') {
                     bat 'dotnet publish -c Release -o out'
                     bat 'powershell Compress-Archive -Path out\\* -DestinationPath webapi.zip -Force'
                 }
