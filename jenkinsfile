@@ -1,69 +1,67 @@
 pipeline {
-        agent any
+    agent any
 
-        environment {
-            AZURE_CREDENTIALS_ID = 'azure-service-principal-01'
-            RESOURCE_GROUP = 'rg-jenkins-terraform'
-            APP_SERVICE_NAME = 'webapiterraform122002'
-            AZURE_CLI_PATH = 'C:/Program Files/Microsoft SDKs/Azure/CLI2/wbin'
-            SYSTEM_PATH = 'C:/Windows/System32'
-            TERRAFORM_PATH = 'C:/Users/dell/Downloads'
-        }
+    environment {
+        AZURE_CREDENTIALS_ID = 'azure-service-principal-01'
+        RESOURCE_GROUP = 'rg-jenkins-terraform'
+        APP_SERVICE_NAME = 'webapiterraform122002'
+        AZURE_CLI_PATH = 'C:/Program Files/Microsoft SDKs/Azure/CLI2/wbin'
+        SYSTEM_PATH = 'C:/Windows/System32'
+        TERRAFORM_PATH = 'C:/Users/dell/Downloads'
+    }
 
-        stages {
+    stages {
 
-            stage('Terraform Init') {
-                steps {
-                    dir('terraform') {
-                        bat '''
-                            set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
-                            terraform init
-                        '''
-                    }
-                }
-            }
-
-            stage('Terraform Plan & Apply') {
-                steps {
-                    dir('terraform') {
-                        bat '''
-                            set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
-                            terraform plan
-                            terraform apply -auto-approve
-                        '''
-                    }
-                }
-            }
-
-            stage('Publish .NET 8 Web API') {
-                steps {
-                    dir('Webapi') {
-                        bat 'dotnet restore'
-                        bat 'dotnet build --configuration Release'
-                        bat 'dotnet publish -c Release -o out'
-                        bat 'powershell Compress-Archive -Path "out\\*" -DestinationPath "Webapi.zip" -Force'
-                    
-                    }
-                }
-            }
-
-            stage('Deploy to Azure App Service') {
-                steps {
-                    withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
-                        bat 'set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%'
-                        bat 'az webapp deploy --resource-group %RESOURCE_GROUP% --name %APP_SERVICE_NAME% --src-path %WORKSPACE%\\Webapi\\Webapi.zip --type zip'
-                    
-                    }
+        stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    bat '''
+                        set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
+                        terraform init
+                    '''
                 }
             }
         }
 
-        post {
-            success {
-                echo 'Deployment Successful!'
+        stage('Terraform Plan & Apply') {
+            steps {
+                dir('terraform') {
+                    bat '''
+                        set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
+                        terraform plan
+                        terraform apply -auto-approve
+                    '''
+                }
             }
-            failure {
-                echo 'Deployment Failed!'
+        }
+
+        stage('Publish .NET 8 Web API') {
+            steps {
+                dir('Webapi') {
+                    bat 'dotnet restore'
+                    bat 'dotnet build --configuration Release'
+                    bat 'dotnet publish -c Release -o out'
+                    bat 'powershell Compress-Archive -Path "out\\*" -DestinationPath "Webapi.zip" -Force'
+                }
             }
-        }
-    }
+        }
+
+        stage('Deploy to Azure App Service') {
+            steps {
+                withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
+                    bat 'set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%'
+                    bat 'az webapp deploy --resource-group %RESOURCE_GROUP% --name %APP_SERVICE_NAME% --src-path %WORKSPACE%\\Webapi\\Webapi.zip --type zip'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful!'
+        }
+        failure {
+            echo 'Deployment Failed!'
+        }
+    }
+}
