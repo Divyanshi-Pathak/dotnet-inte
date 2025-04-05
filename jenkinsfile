@@ -7,7 +7,7 @@ pipeline {
             APP_SERVICE_NAME = 'webapiterraform122002'
             AZURE_CLI_PATH = 'C:/Program Files/Microsoft SDKs/Azure/CLI2/wbin'
             SYSTEM_PATH = 'C:/Windows/System32'
-            TERRAFORM_PATH = 'C:\Users\dell\Downloads'
+            TERRAFORM_PATH = 'C:/Users/dell/Downloads'
         }
 
         stages {
