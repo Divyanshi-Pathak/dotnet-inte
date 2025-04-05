@@ -14,7 +14,7 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                dir('terraform') {
+                dir('terraform_app') {
                     bat '''
                         set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
                         terraform init
@@ -25,7 +25,7 @@ pipeline {
 
         stage('Terraform Plan & Apply') {
             steps {
-                dir('terraform') {
+                dir('terraform_app') {
                     bat '''
                         set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
                         terraform plan
@@ -37,7 +37,7 @@ pipeline {
 
         stage('Publish .NET 8 Web API') {
             steps {
-                dir('Webapi') {
+                dir('dotnet_with_terraform') {
                     bat 'dotnet restore'
                     bat 'dotnet build --configuration Release'
                     bat 'dotnet publish -c Release -o out'
