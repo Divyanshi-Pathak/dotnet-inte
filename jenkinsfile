@@ -11,6 +11,28 @@ pipeline {
     }
 
     stages {
+         stage('Terraform Init') {
+            steps {
+                dir('terraform_app') {
+                    bat '''
+                        set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
+                        terraform init
+                    '''
+                }
+            }
+        }
+
+        stage('Terraform Plan & Apply') {
+            steps {
+                dir('terraform_app') {
+                    bat '''
+                        set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
+                        terraform plan
+                        terraform apply -auto-approve
+                    '''
+                }
+            }
+        }
 
         stage('Publish .NET 8 Web API') {
             steps {
