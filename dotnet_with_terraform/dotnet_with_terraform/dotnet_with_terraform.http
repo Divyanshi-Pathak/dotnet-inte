@@ -1,0 +1,6 @@
+@dotnet_with_terraform_HostAddress = http://localhost:5192
+
+GET {{dotnet_with_terraform_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "YReJ5LZvIH9Nt1aYR9zrksDUh+9Rpfxchl05teBWFic=",
+  "Source": "dotnet_with_terraform",
+  "BasePath": "_content/dotnet_with_terraform",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
