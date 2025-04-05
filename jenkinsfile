@@ -28,7 +28,7 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                dir('terraform') {
+                dir('terraform_app') {
                     bat '"%TERRAFORM_PATH%" init'
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
 
         stage('Terraform Plan & Apply') {
             steps {
-                dir('terraform') {
+                dir('terraform_app') {
                     bat '"%TERRAFORM_PATH%" plan -out=tfplan'
                     bat '"%TERRAFORM_PATH%" apply -auto-approve tfplan'
                 }
