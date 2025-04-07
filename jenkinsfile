@@ -25,12 +25,12 @@ pipeline {
         stage('Terraform Plan & Apply') {
             steps {
                 dir('terraform_app') {
-                    bat '''
-                       set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
-                       set TF_LOG=DEBUG
-                       terraform plan -out=tfplan
-                       terraform apply -auto-approve tfplan
-                    '''
+                    
+                      bat 'set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%'
+                      bat 'set TF_LOG=DEBUG'
+                      bat 'terraform plan -out=tfplan'
+                      bat 'terraform apply -auto-approve tfplan'
+                    
                 }
             }
         }
