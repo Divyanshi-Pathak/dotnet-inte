@@ -16,7 +16,7 @@ pipeline {
                 dir('terraform_app') {
                     bat '''
                         set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
-                        terraform init -upgrade
+                        terraform init 
                     '''
                 }
             }
@@ -26,9 +26,10 @@ pipeline {
             steps {
                 dir('terraform_app') {
                     bat '''
-                        set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
-                        terraform plan
-                        terraform apply -auto-approve
+                       set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
+                       set TF_LOG=DEBUG
+                       terraform plan -out=tfplan
+                       terraform apply -auto-approve tfplan
                     '''
                 }
             }
