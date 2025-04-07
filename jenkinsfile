@@ -16,7 +16,7 @@ pipeline {
                 dir('terraform_app') {
                     bat '''
                         set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
-                        terraform init
+                        terraform init -upgrade
                     '''
                 }
             }
