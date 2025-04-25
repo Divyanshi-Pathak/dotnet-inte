@@ -19,23 +19,19 @@ pipeline {
                 dir('terraform_app') {
                     bat '''
                         set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
+                        echo Initializing Terraform...
                         terraform init 
+
+                        echo Creating Terraform Plan...
+                        terraform plan 
+
+                        echo Applying Terraform Plan...
+                        terraform apply -auto-approve 
                     '''
                 }
             }
         }
 
-        stage('Terraform Plan & Apply') {
-            steps {
-                dir('terraform_app') {
-                    
-                      bat 'set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%'
-                      bat 'terraform plan'
-                      bat 'terraform apply -auto-approve'
-                    
-                }
-            }
-        }
 
         stage('Publish .NET 8 Web API') {
             steps {
