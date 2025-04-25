@@ -30,7 +30,6 @@ pipeline {
                 dir('terraform_app') {
                     
                       bat 'set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%'
-                      bat 'set TF_LOG=DEBUG'
                       bat 'terraform plan'
                       bat 'terraform apply -auto-approve'
                     
