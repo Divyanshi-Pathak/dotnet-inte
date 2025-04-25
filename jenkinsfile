@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        terraform 'terraform-1.11.6'
+    }
 
     environment {
         AZURE_CREDENTIALS_ID = 'azure-service-principal-01'
