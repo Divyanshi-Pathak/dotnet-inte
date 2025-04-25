@@ -19,14 +19,18 @@ pipeline {
                 dir('terraform_app') {
                     bat '''
                         set PATH=%AZURE_CLI_PATH%;%SYSTEM_PATH%;%TERRAFORM_PATH%;%PATH%
-                        echo Initializing Terraform...
-                        terraform init 
-
+                        echo Cleaning old Terraform lock and cache...
+                        if exist .terraform.lock.hcl del /f /q .terraform.lock.hcl
+                        if exist .terraform rmdir /s /q .terraform
+        
+                        echo Initializing Terraform with upgrade...
+                        terraform init -upgrade
+        
                         echo Creating Terraform Plan...
                         terraform plan 
-
+        
                         echo Applying Terraform Plan...
-                        terraform apply -auto-approve 
+                        terraform apply -auto-approve  
                     '''
                 }
             }
